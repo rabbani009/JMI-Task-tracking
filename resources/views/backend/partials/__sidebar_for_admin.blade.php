@@ -22,7 +22,7 @@
             >
                 <i class="fa fa-sticky-note" style="font-size: 15px"></i>
                 <p>
-                    <span class="badge badge-success">Monthly -></span>
+                    <span class="badge badge-success">Task -></span>
                     Report
                 </p>
             </a> 
@@ -32,39 +32,65 @@
     </ul>
 </li>
 
-<li class="nav-header">Assignment Section</li>
+<!-- SBU SECTION -->
+<li class="nav-header">SBU</li>
 
 <li class="nav-item @if($commons['main_menu'] == 'activity') menu-open @endif">
     <a
-        href="{{ route('assignment.create')}}"
+        href=""
         class="nav-link @if($commons['current_menu'] == 'activity_create') active @endif"
     >
         <i class="nav-icon fas fa-plus"></i>
-        <p> Add Assignment</p>
+        <p> Add SBU</p>
     </a>
 </li>
 
 <li class="nav-item @if($commons['main_menu'] == 'activity') menu-open @endif">
     <a
-        href="{{ route('assignment.index')}}"
+        href="{{ route('sbu.index') }}"
         class="nav-link @if($commons['current_menu'] == 'activity_index') active @endif"
     >
         <i class="nav-icon fas fa-list"></i>
-        <p>List All Assignment</p>
+        <p>List</p>
     </a>
 </li>
 
-<li class="nav-header">Students Submitted Assignment</li>
+<!-- TASK CREATE SECTION -->
 
-
-<li class="nav-item @if($commons['main_menu'] == 'activity') menu-open @endif">
+<li class="nav-item @if($commons['main_menu'] == 'trainer') menu-open @endif">
     <a
-        href="{{ route('track.index')}}"
-        class="nav-link @if($commons['current_menu'] == 'activity_create') active @endif"
+        href="#"
+        class="nav-link @if($commons['main_menu'] == 'trainer') active @endif"
     >
-        <i class="nav-icon fas fa-list"></i>
-        <p>Track Assignment</p>
+        <i class="nav-icon fas fa-user-tie"></i>
+        <p>
+            Task
+            <i class="right fas fa-angle-left"></i>
+        </p>
     </a>
+    <ul class="nav nav-treeview">
+        <li class="nav-item">
+            <a
+                href="{{ route('task.create') }}"
+                class="nav-link @if($commons['current_menu'] == 'trainer_create') active @endif"
+            >
+                <i class="fas fa-plus nav-icon"></i>
+                <p>Add</p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a
+                href="{{ route('task.index')}}"
+                class="nav-link @if($commons['current_menu'] == 'trainer_index') active @endif"
+            >
+                <i class="fas fa-list nav-icon"></i>
+                <p>List</p>
+            </a>
+        </li>
+    </ul>
 </li>
+
+
+
 
 

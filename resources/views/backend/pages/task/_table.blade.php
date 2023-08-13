@@ -14,7 +14,7 @@ use App\Models\StageTrack;
         <!-- /.card-header -->
 
         <div class="card-body p-0">
-            <table class="table table-responsive text-center">
+            <table class="table table-responsive text-center table-bordered">
                 <thead>
                     <tr>
                         <th style="width: 10px">#</th>
@@ -162,6 +162,16 @@ use App\Models\StageTrack;
                 </div>
 
                 <div class="form-group">
+                    <label for="stageStatus">Notify stage Status</label>
+                    <select class="form-control" id="stageStatus">
+
+                        <option value="">Select stage status</option>
+                     
+                    </select>
+                <span id="stageStatusError" class="text-danger"></span> <!-- Error message for Stage status -->
+                </div>
+
+                <div class="form-group">
                     <label for="office">Notify Task status</label>
                     <select class="form-control" id="taskStatus">
                         <option value="">Select Task status</option>
@@ -172,15 +182,7 @@ use App\Models\StageTrack;
                     </select>
                 <span id="taskStatusError" class="text-danger"></span> <!-- Error message for Task status -->
                 </div>
-                <div class="form-group">
-                    <label for="stageStatus">Notify stage Status</label>
-                    <select class="form-control" id="stageStatus">
-
-                        <option value="">Select stage status</option>
-                     
-                    </select>
-                <span id="stageStatusError" class="text-danger"></span> <!-- Error message for Stage status -->
-                </div>
+               
 
                 <div class="row">
                         <div class="col-md-6">
@@ -237,8 +239,8 @@ use App\Models\StageTrack;
 
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <script>
-  
 
     $(document).ready(function() {
         $(".notify-btn").on("click", function() {

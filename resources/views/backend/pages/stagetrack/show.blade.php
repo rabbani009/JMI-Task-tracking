@@ -64,8 +64,24 @@
                           {{ $data->end_date }}
                       </td>
                       <td class="project_progress">
-                         
-                      </td>
+                        
+                      @if (!empty($data->attachments))
+                            <?php
+                                $attachmentList = json_decode($data->attachments, true);
+                                $filename = basename($attachmentList[0]);
+                                $attachmentPath = 'attachments/' . $filename;
+                            ?>
+                            <a href="{{ asset($attachmentPath) }}" download="{{ $filename }}">
+                                <i class="far fa-file"></i> Download Attachment
+                            </a>
+                        @else
+                            &nbsp;
+                        @endif
+
+
+
+
+                     </td>
                       <td class="project-state">
                            @if($data->task_status == 1)
                                  <span class="badge badge-pill badge-info"> Started </span>
@@ -77,6 +93,7 @@
                                 <span class="badge badge-pill badge-danger"> Rejected </span>
                             @endif
                       </td>
+                    @if(auth()->user()->role->slug != 'system_admin')  
                       <td class="project-actions text-right">
                           
                           <a class="btn btn-info btn-sm" href="#">
@@ -90,6 +107,7 @@
                               Delete
                           </a>
                       </td>
+                    @endif
                   </tr>
 
                 @endforeach 

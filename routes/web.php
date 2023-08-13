@@ -71,8 +71,8 @@ Route::group(['prefix' => 'backend', 'middleware' => 'authenticated'], function 
 
     Route::post('saveTaskTrackData', [AjaxController::class, 'saveTaskTrackData']);
 
-
-
+ 
+    
 
 
 });
