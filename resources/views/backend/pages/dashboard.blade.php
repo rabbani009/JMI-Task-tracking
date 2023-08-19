@@ -13,7 +13,11 @@ use App\Models\StageTrack;
 @endsection
 
 @section('page_level_css_files')
-
+    <style>
+    .clickable-row {
+        cursor: pointer;
+    }
+    </style>
 @endsection
 
 @section('content')
@@ -45,7 +49,7 @@ use App\Models\StageTrack;
                   </thead>
                   <tbody>
                     @foreach($tasks as $row)
-                    <tr>
+                    <tr class="clickable-row" data-href="{{ route('stage.show', $row->task_id) }}">
                       <td>{{ $loop->iteration }}.</td>
                       <td>{{ $row->task_title}}</td>
                       <td>{{ $row->sbu->name}}</td>
@@ -83,9 +87,9 @@ use App\Models\StageTrack;
 
                       <td class="custom_actions">
                             <div class="btn-group">
-                                <a href="{{ route('stage.show', $row->task_id) }}" class="btn btn-flat btn-outline-primary btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="View">
+                                <!-- <a href="{{ route('stage.show', $row->task_id) }}" class="btn btn-flat btn-outline-primary btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="View">
                                     <i class="far fa-eye"></i>
-                                </a>    
+                                </a>     -->
                             @if(auth()->user()->role->slug != 'system_admin')      
                                 <a href="#" type="button" class="btn btn-flat btn-outline-info btn-sm notify-btn" data-toggle="modal" data-target="#modal-lg" data-task-id="{{ $row->task_id }}" title="Notify">
                                     <i class="far fa-edit"></i>
@@ -392,6 +396,30 @@ use App\Models\StageTrack;
     });
 </script>
 
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("click", function(event) {
+        const clickedElement = event.target;
 
+        // Check if the clicked element or its ancestor is a non-clickable element
+        if (
+            clickedElement.classList.contains("notify-btn") ||
+            clickedElement.closest(".notify-btn")
+        ) {
+            // Clicked on a non-clickable element, do nothing
+            return;
+        }
+
+        // Handle the row click for redirection
+        const clickableRow = clickedElement.closest(".clickable-row");
+        if (clickableRow) {
+            const url = clickableRow.getAttribute("data-href");
+            if (url) {
+                window.location.href = url;
+            }
+        }
+    });
+});
+</script>
 
 @endsection
