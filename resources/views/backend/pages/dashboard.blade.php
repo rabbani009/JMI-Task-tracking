@@ -24,7 +24,7 @@ use App\Models\StageTrack;
 
 <div class="container-fluid">
 <div class="row">
-    <div class="col-md-8">
+    <div class="col-md-6">
     <div class="card">
         <div class="card-header">
             <h1 class="card-title">{{ $commons['content_title'] }}</h1>
@@ -40,25 +40,20 @@ use App\Models\StageTrack;
                   <thead>
                     <tr>
                       <th style="width: 10px">#</th>
-                      <th>Task</th>
-                      <th>SBU</th>
-                      <th>Progress</th>
-                      <th>Task Status</th>
-                      <th>Actions</th>
+                      <th class="clickable-task">Task</th>
+                      <th class="clickable-sbu">SBU</th>
+                      <th class="clickable-status">Task Status</th>
+                     
                     </tr>
                   </thead>
                   <tbody>
                     @foreach($tasks as $row)
-                    <tr class="clickable-row" data-href="{{ route('stage.show', $row->task_id) }}">
+                    <tr class="clickable-row" data-href="{{ route('stage.show', $row->task_id) }}" data-task-id="{{ $row->task_id }}" data-user-role="{{ auth()->user()->role->slug }}">
                       <td>{{ $loop->iteration }}.</td>
-                      <td>{{ $row->task_title}}</td>
-                      <td>{{ $row->sbu->name}}</td>
-                      <td>
-                        <div class="progress progress-xs">
-                          <div class="progress-bar progress-bar-danger" style="width: 55%"></div>
-                        </div>
-                      </td>
-                      <td>
+                      <td class="clickable-task">{{ $row->task_title }}</td>
+                      <td class="clickable-sbu">{{ $row->sbu->name }}</td>
+                     
+                      <td class="clickable-status">
                             @php
                                 $taskApprovedSteps = json_decode($row->task_approved_steps, true);
 
@@ -85,11 +80,11 @@ use App\Models\StageTrack;
                             @endif
                       </td>
 
-                      <td class="custom_actions">
+                      <!-- <td class="custom_actions">
                             <div class="btn-group">
-                                <!-- <a href="{{ route('stage.show', $row->task_id) }}" class="btn btn-flat btn-outline-primary btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="View">
+                                <a href="{{ route('stage.show', $row->task_id) }}" class="btn btn-flat btn-outline-primary btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="View">
                                     <i class="far fa-eye"></i>
-                                </a>     -->
+                                </a>    
                             @if(auth()->user()->role->slug != 'system_admin')      
                                 <a href="#" type="button" class="btn btn-flat btn-outline-info btn-sm notify-btn" data-toggle="modal" data-target="#modal-lg" data-task-id="{{ $row->task_id }}" title="Notify">
                                     <i class="far fa-edit"></i>
@@ -97,7 +92,7 @@ use App\Models\StageTrack;
                             @endif
                            
                             </div>
-                     </td>
+                     </td> -->
 
                     </tr>
                  
@@ -117,7 +112,7 @@ use App\Models\StageTrack;
 </div>
 
 
-   <!-- /.modal -->
+   <!-- /.modal Section here -->
 
    <div class="modal fade" id="modal-lg">
         <div class="modal-dialog modal-lg">
@@ -169,7 +164,6 @@ use App\Models\StageTrack;
                     <select class="form-control" id="taskStatus">
                         <option value="">Select Task status</option>
                         <option value="1">Started</option>
-                        <option value="2">Working</option>
                         <option value="3">Completed</option>
                         <option value="4">Rejected</option>
                     </select>
@@ -225,7 +219,7 @@ use App\Models\StageTrack;
         </div>
         <!-- /.modal-dialog -->
       </div>
-      <!-- /.modal -->
+      <!-- /. End of modal -->
 
 
 
@@ -396,30 +390,94 @@ use App\Models\StageTrack;
     });
 </script>
 
+<!-- Row click functionality -->
+
 <script>
 document.addEventListener("DOMContentLoaded", function() {
     document.addEventListener("click", function(event) {
         const clickedElement = event.target;
-
-        // Check if the clicked element or its ancestor is a non-clickable element
-        if (
-            clickedElement.classList.contains("notify-btn") ||
-            clickedElement.closest(".notify-btn")
-        ) {
-            // Clicked on a non-clickable element, do nothing
-            return;
-        }
-
-        // Handle the row click for redirection
         const clickableRow = clickedElement.closest(".clickable-row");
+
         if (clickableRow) {
-            const url = clickableRow.getAttribute("data-href");
-            if (url) {
-                window.location.href = url;
+            const userRoleSlug = clickableRow.getAttribute("data-user-role");
+
+            if (clickedElement.classList.contains("clickable-task") ||
+                clickedElement.classList.contains("clickable-sbu")) {
+                const url = clickableRow.getAttribute("data-href");
+                if (url) {
+                    window.location.href = url;
+                }
+            } else if (clickedElement.classList.contains("badge")) {
+                const taskID = clickableRow.getAttribute("data-task-id");
+
+                if (userRoleSlug !== 'system_admin') {
+                    openModalWithTaskID(taskID); // Pass the task ID to the function
+                }
             }
         }
     });
+
+    function openModalWithTaskID(taskID) {
+        // Open the modal and populate fields based on taskID
+        const modal = document.getElementById("modal-lg");
+        const taskTitleField = modal.querySelector("#taskTitle");
+        const taskIDField = modal.querySelector("#taskID");
+        const taskSBUField = modal.querySelector("#taskSBU");
+
+        // Use an AJAX request to get the task data based on the taskID
+        $.ajax({
+            url: "getTaskData/" + taskID,
+            method: "GET",
+            success: function(response) {
+                taskTitleField.value = response.task_title; // Populate the task title field
+                taskIDField.value = response.task_id; // Populate the task ID field
+                
+                // Populate SBU name
+                if (response.sbu) {
+                    taskSBUField.value = response.sbu.name;
+                } else {
+                    taskSBUField.value = '';
+                }
+
+                // Format dates
+                function formatDate(date) {
+                    var year = date.getFullYear();
+                    var month = String(date.getMonth() + 1).padStart(2, '0');
+                    var day = String(date.getDate()).padStart(2, '0');
+                    return year + '-' + month + '-' + day;
+                }
+
+                var startDate = new Date(response.start_date);
+                var endDate = new Date(response.end_date);
+
+                var formattedStartDate = formatDate(startDate);
+                var formattedEndDate = formatDate(endDate);
+
+                $("#startDate").val(formattedStartDate);
+                $("#endDate").val(formattedEndDate);
+
+                // Parse the JSON string for task_approved_steps
+                var approvedSteps = JSON.parse(response.task_approved_steps);
+
+                // Add the approvedSteps as options to the taskStatus dropdown
+                var taskStatusDropdown = $("#stageStatus");
+                taskStatusDropdown.empty(); // Clear existing options
+                approvedSteps.forEach(function(step) {
+                    taskStatusDropdown.append('<option value="' + step + '">' + step + '</option>');
+                });
+
+                // ... Populate other fields as needed based on the response
+
+                // Open the modal
+                $(modal).modal("show");
+            },
+            error: function(error) {
+                console.log("Error fetching task data:", error);
+            }
+        });
+    }
 });
 </script>
+
 
 @endsection
