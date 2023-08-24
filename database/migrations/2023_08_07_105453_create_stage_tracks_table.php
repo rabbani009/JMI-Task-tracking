@@ -20,7 +20,9 @@ return new class extends Migration
             $table->string('stage_status');
             $table->date('start_date');
             $table->date('end_date')->nullable();
+            $table->text('reason_description')->nullable();
             $table->json('attachments')->nullable(); // Define the 'attachments' column
+            $table->string('attachment_title')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->timestamps();
 

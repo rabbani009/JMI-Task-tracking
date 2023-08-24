@@ -47,6 +47,9 @@ public function saveTaskTrackData(Request $request)
                 // Define the stage_status and task_status values
             $stageStatus = $request->input('stage_status');
             $taskStatus = $request->input('task_status');
+            $attachmentTitle = $request->input('attachment_title');
+            $reasonDescription = $request->input('reason_description');
+
                 // Check if a record with the same stage_status, task_status, and user_id combination already exists
             $existingRecord = StageTrack::where('task_id', $request->input('task_id'))
             ->where('stage_status', $stageStatus)
@@ -78,6 +81,8 @@ public function saveTaskTrackData(Request $request)
             $stageTrack->start_date = $request->input('start_date');
             $stageTrack->end_date = $request->input('end_date');
             $stageTrack->user_id = $userId; // Assign the user ID
+            $stageTrack->attachment_title = $attachmentTitle;
+            $stageTrack->reason_description = $reasonDescription;
 
             // Save file attachments to the server and store their paths in the database
             if ($request->hasFile('attachments')) {
@@ -96,6 +101,9 @@ public function saveTaskTrackData(Request $request)
             // Return a response indicating success or any other necessary information
             return response()->json(['message' => 'Task track data saved successfully']);
         }
+
+    
+        
 
 
 }

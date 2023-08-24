@@ -27,13 +27,16 @@
                           Stage Status
                       </th>
                       <th style="width: 15%">
-                          Start Date
+                          Approval Date
                       </th>
                       <th style="width: 15%">
-                          End Date
+                          Expected Approval Date
                       </th>
                       <th>
                           Attachments
+                      </th>
+                      <th>
+                          Reason
                       </th>
                       <th style="width: 8%" class="text-center">
                           Task Status
@@ -79,10 +82,10 @@
                             &nbsp;
                         @endif
 
-
-
-
                      </td>
+
+                     <td>{{ $data->reason_description }}</td>
+                     
                       <td class="project-state">
                            @if($data->task_status == 1)
                                  <span class="badge badge-pill badge-info"> Started </span>
