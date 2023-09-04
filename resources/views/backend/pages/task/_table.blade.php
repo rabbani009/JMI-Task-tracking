@@ -94,9 +94,9 @@ use App\Models\StageTrack;
                                    <i class="far fa-edit"></i>
                                 </a>
                             @endif
-                            <a href="#" type="button" class="btn btn-flat btn-outline-info btn-sm notify-btn" data-toggle="modal" data-target="#modal-lg" data-task-id="{{ $row->task_id }}" title="Notify">
+                            <!-- <a href="#" type="button" class="btn btn-flat btn-outline-info btn-sm notify-btn" data-toggle="modal" data-target="#modal-lg" data-task-id="{{ $row->task_id }}" title="Notify">
                                 <i class="fa fa-plus-square"></i>
-                            </a>
+                            </a> -->
                                                         
                            @if(auth()->user()->role->slug != 'sbu_admin') 
                                 <form method="post" class="list_delete_form" action="" accept-charset="UTF-8" >

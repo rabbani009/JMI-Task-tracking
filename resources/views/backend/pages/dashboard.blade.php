@@ -24,7 +24,7 @@ use App\Models\StageTrack;
 
 <div class="container-fluid">
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-5">
     <div class="card">
         <div class="card-header">
             <h1 class="card-title">{{ $commons['content_title'] }}</h1>
@@ -40,7 +40,7 @@ use App\Models\StageTrack;
             <div class="form-group">
                 <label for="taskFilter">Filter by Status</label>
                 <select class="form-control" id="taskFilter">
-                    <option value="">All</option>
+                    <option value="">Filter data</option>
                     <option value="0">Not started</option>
                     <option value="3">Approved</option>
                     <option value="2">On-progress</option>
@@ -328,14 +328,24 @@ taskFilter.addEventListener("change", function() {
 
     // Show/hide rows based on the selected filter
     rows.forEach(function(row) {
-        const taskStatus = parseInt(row.getAttribute("data-task-status"));
+    const taskStatus = parseInt(row.getAttribute("data-task-status"));
 
-        if (selectedValue === 0 || taskStatus === selectedValue) {
+    if (selectedValue === 0) {
+        // Show only "Not started" tasks when "Not started" is selected
+        if (taskStatus === 0) {
             row.style.display = ""; // Show
         } else {
             row.style.display = "none"; // Hide
         }
-    });
+    } else if (taskStatus === selectedValue) {
+        // Show tasks matching the selected status
+        row.style.display = ""; // Show
+    } else {
+        row.style.display = "none"; // Hide
+    }
+});
+
+
 });
 
 
