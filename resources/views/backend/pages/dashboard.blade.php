@@ -24,7 +24,7 @@ use App\Models\StageTrack;
 
 <div class="container-fluid">
 <div class="row">
-    <div class="col-md-5">
+    <div class="col-md-6">
     <div class="card">
         <div class="card-header">
             <h1 class="card-title">{{ $commons['content_title'] }}</h1>
