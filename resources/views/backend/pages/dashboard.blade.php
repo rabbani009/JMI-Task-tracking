@@ -30,7 +30,7 @@ use App\Models\StageTrack;
             <h1 class="card-title">{{ $commons['content_title'] }}</h1>
 
             <div class="card-tools">
-                Note:: [ You have to scroll Left => Right to see the full content ]
+                Note:: [ You have to Click Row =>  to see the full content ]
             </div>
         </div>
         <!-- /.card-header -->
@@ -56,6 +56,7 @@ use App\Models\StageTrack;
                       <th class="clickable-task">Task</th>
                       <th class="clickable-sbu">SBU</th>
                       <th class="clickable-status">Task Status</th>
+                      <th class="clickable-status">Finished Task</th>
                      
                     </tr>
                   </thead>
@@ -92,6 +93,24 @@ use App\Models\StageTrack;
                                 <span class="badge badge-pill badge-warning">Not Started</span>
                             @endif
                       </td>
+
+                   <td>
+                    
+                        <form method="POST" action="{{ route('tasks.complete', $row) }}" class="toggle-task-status-form">
+                            @csrf
+                            @method('POST')
+                            <button type="submit" class="btn btn-flat btn-outline-primary btn-sm toggle-task-status" data-bs-toggle="tooltip" data-bs-placement="top" title="Toggle Status">
+                                <i class="far fa-check-square"></i>
+                                <span class="button-text">
+                                    @if($row->task_status === 0)
+                                        Mark as Finished
+                                    @else
+                                        Finished
+                                    @endif
+                                </span>
+                            </button>
+                        </form>
+                    </td>
                       
                     </tr>
                  
@@ -345,15 +364,47 @@ taskFilter.addEventListener("change", function() {
     }
 });
 
-
 });
 
 
 
-
-
 });
+
 </script>
+
+<script>
+    $(document).ready(function() {
+        // Handle "Mark as Finished" button clicks
+        $('.toggle-task-status-form').submit(function(event) {
+            event.preventDefault(); // Prevent the form from submitting
+            var form = $(this);
+            var buttonText = form.find('.button-text');
+            var currentStatus = form.data('current-status'); // Add a data attribute to store the current status
+
+            // Perform AJAX request to toggle the task status
+            $.ajax({
+                type: 'POST',
+                url: form.attr('action'),
+                data: form.serialize(),
+                success: function(response) {
+                    // Toggle the button text based on the new task status
+                    if (response.task_status === 0) {
+                        buttonText.text('Mark as Finished');
+                    } else {
+                        buttonText.text('Finished');
+                    }
+
+                    // Update the data attribute with the new status
+                    form.data('current-status', response.task_status);
+                }
+            });
+        });
+    });
+</script>
+
+
+
+
 
 
 @endsection

@@ -8,6 +8,7 @@ use App\Http\Requests\CreateTaskRequest;
 use App\Models\Sbu;
 use App\Models\User;
 use App\Models\Task;
+use Illuminate\Support\Facades\Gate;
 
 
 
@@ -146,7 +147,7 @@ class TaskController extends Controller
     
             return redirect()
                 ->back()
-                ->with('failed', 'Task cannot be created!');
+                ->with('failed', 'Task is not create!');
 
     }
 
@@ -195,12 +196,30 @@ class TaskController extends Controller
         //
     }
 
-
+  //Generate Unique Task ID
 
     private function generateUniqueId()
     {
         return str_pad(mt_rand(100000, 999999), 6, '0', STR_PAD_LEFT);
     }
+
+    //Mark as finished Task
+
+    public function complete(Task $task)
+    {
+       
+          
+        // Toggle the task status between 0 (ongoing) and 3 (finished)
+        $newStatus = $task->task_status === 0 ? 3 : 0;
+        $task->update(['task_status' => $newStatus]);
+    
+        // Return the updated task status in the response
+        return response()->json(['task_status' => $newStatus]);
+    }
+    
+    
+    
+    
 
 
 

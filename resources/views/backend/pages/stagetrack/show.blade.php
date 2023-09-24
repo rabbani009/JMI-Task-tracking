@@ -24,7 +24,7 @@
                           #
                       </th>
                       <th style="width: 20%">
-                          Stage Status
+                          Stage
                       </th>
                       <th style="width: 15%">
                           Approval Date
@@ -39,7 +39,7 @@
                           Reason
                       </th>
                       <th style="width: 8%" class="text-center">
-                          Task Status
+                           Status
                       </th>
                       <th style="width: 20%">
                       </th>

@@ -61,9 +61,7 @@ Route::group(['prefix' => 'backend', 'middleware' => 'authenticated'], function 
     Route::resource('task', TaskController::class);
     Route::resource('stage', StageTrackController::class);
 
-
-
-
+    Route::post('/tasks/{task}/complete',[TaskController::class,'complete'])->name('tasks.complete');
 
     // Ajax routes ........
 
