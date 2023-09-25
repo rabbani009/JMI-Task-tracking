@@ -5,6 +5,7 @@ namespace App\Http\Controllers\BackendControllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\StageTrack;
+use App\Models\Task;
 
 class stageTrackController extends Controller
 {
@@ -58,10 +59,13 @@ class stageTrackController extends Controller
 
         // dd($taskData);
 
+        $task = Task::where('task_id', $task_id)->first();
+
         return view('backend.pages.stagetrack.show',
             compact(
                 'commons',
                 'taskData',
+                'task'
 
             )
         );

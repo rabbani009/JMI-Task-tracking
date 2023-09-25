@@ -14,7 +14,76 @@
             {!! implode('', $errors->all('<div>:message</div>')) !!}
         @endif
         <div class="card">
-          
+
+      <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+
+        <!-- Timelime example  -->
+        <div class="row">
+          <div class="col-md-6">
+            <!-- The time line -->
+            <div class="timeline">
+              <!-- timeline time label -->
+              <div class="time-label">
+                <span class="bg-red">Total Task Approval Steps</span>
+              </div>
+              <!-- /.timeline-label -->
+              <!-- timeline item -->
+              @foreach(json_decode($task->task_approved_steps) as $step)
+              <div>
+                <i class="fas fa-arrow-right bg-blue"></i>
+                <div class="timeline-item">
+                 
+                  <h3 class="timeline-header">{{$step}}</h3>
+                </div>
+              </div>
+              @endforeach
+              <!-- END timeline item -->
+
+             
+            </div>
+          </div>
+          <!-- /.col -->
+          <div class="col-md-6">
+          <div class="timeline">
+                <div class="time-label">
+                        <span class="bg-red">Task Details</span>
+                </div>
+         </div>
+          <div class="card card-primary card-outline">
+              <div class="card-body box-profile">
+                
+                <h3 class="profile-username text-center">{{$task->task_title}}</h3>
+
+                <ul class="list-group list-group-unbordered mb-3">
+                  <li class="list-group-item">
+                    <b>SBU : </b> <a class="float-right">{{ $task->sbu->name}}</a>
+                  </li>
+                  <li class="list-group-item">
+                    <b>Task Opening Date : </b> <a class="float-right">{{ \Carbon\Carbon::parse($task->start_date)->format('Y-m-d') }}</a>
+                  </li>
+                  <li class="list-group-item">
+                    <b>Expected Closing Date : </b> <a class="float-right">{{ \Carbon\Carbon::parse($task->end_date)->format('Y-m-d') }}</a>
+                  </li>
+                </ul>
+
+              </div>
+              <!-- /.card-body -->
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+      <!-- /.timeline -->
+
+    </section>
+    <!-- /.content -->
+
+        </div>
+        <div class="card">
+       
 
         <div class="card-body">
             <table class="table table-responsive-md table-responsive-lg table-responsive-md text-center">
