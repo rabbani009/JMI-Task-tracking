@@ -56,7 +56,8 @@ use App\Models\StageTrack;
                       <th class="clickable-task">Task</th>
                       <th class="clickable-sbu">SBU</th>
                       <th class="clickable-status">Task Status</th>
-                      <th class="clickable-status">Finished Task</th>
+                      <th class="clickable-finished-task">Finished Task</th>
+
                      
                     </tr>
                   </thead>
@@ -94,8 +95,7 @@ use App\Models\StageTrack;
                             @endif
                       </td>
 
-                   <td>
-                    
+                      <td>
                         <form method="POST" action="{{ route('tasks.complete', $row) }}" class="toggle-task-status-form">
                             @csrf
                             @method('POST')
@@ -110,7 +110,9 @@ use App\Models\StageTrack;
                                 </span>
                             </button>
                         </form>
-                    </td>
+                      </td>
+
+
                       
                     </tr>
                  
@@ -266,6 +268,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
             }
         }
+             
     });
 
     function openModalWithTaskID(taskID) {
@@ -329,50 +332,51 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     
-// Get the task filter element
-const taskFilter = document.getElementById("taskFilter");
+        // Get the task filter element
+        const taskFilter = document.getElementById("taskFilter");
 
-// Add a change event listener to the task filter
-taskFilter.addEventListener("change", function() {
-    // Get the selected value from the task filter
-    let selectedValue = parseInt(taskFilter.value);
+        // Add a change event listener to the task filter
+        taskFilter.addEventListener("change", function() {
+            // Get the selected value from the task filter
+            let selectedValue = parseInt(taskFilter.value);
 
-    // Handle the case where the selected value is not a number (NaN)
-    if (isNaN(selectedValue)) {
-        selectedValue = 0; // Set to "All"
-    }
+            // Handle the case where the selected value is not a number (NaN)
+            if (isNaN(selectedValue)) {
+                selectedValue = 0; // Set to "All"
+            }
 
-    // Get all rows with the class "clickable-row"
-    const rows = document.querySelectorAll(".clickable-row");
+            // Get all rows with the class "clickable-row"
+            const rows = document.querySelectorAll(".clickable-row");
 
-    // Show/hide rows based on the selected filter
-    rows.forEach(function(row) {
-    const taskStatus = parseInt(row.getAttribute("data-task-status"));
+            // Show/hide rows based on the selected filter
+            rows.forEach(function(row) {
+            const taskStatus = parseInt(row.getAttribute("data-task-status"));
 
-    if (selectedValue === 0) {
-        // Show only "Not started" tasks when "Not started" is selected
-        if (taskStatus === 0) {
-            row.style.display = ""; // Show
-        } else {
-            row.style.display = "none"; // Hide
-        }
-    } else if (taskStatus === selectedValue) {
-        // Show tasks matching the selected status
-        row.style.display = ""; // Show
-    } else {
-        row.style.display = "none"; // Hide
-    }
+            if (selectedValue === 0) {
+                // Show only "Not started" tasks when "Not started" is selected
+                if (taskStatus === 0) {
+                    row.style.display = ""; // Show
+                } else {
+                    row.style.display = "none"; // Hide
+                }
+            } else if (taskStatus === selectedValue) {
+                // Show tasks matching the selected status
+                row.style.display = ""; // Show
+            } else {
+                row.style.display = "none"; // Hide
+            }
+        });
+
+        });
+
+
+
 });
 
-});
 
-
-
-});
-
-</script>
 
 <script>
+
     $(document).ready(function() {
         // Handle "Mark as Finished" button clicks
         $('.toggle-task-status-form').submit(function(event) {
@@ -390,6 +394,7 @@ taskFilter.addEventListener("change", function() {
                     // Toggle the button text based on the new task status
                     if (response.task_status === 0) {
                         buttonText.text('Mark as Finished');
+                        
                     } else {
                         buttonText.text('Finished');
                     }
@@ -400,6 +405,16 @@ taskFilter.addEventListener("change", function() {
             });
         });
     });
+</script>
+
+
+
+
+
+
+
+
+
 </script>
 
 

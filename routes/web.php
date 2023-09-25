@@ -63,6 +63,8 @@ Route::group(['prefix' => 'backend', 'middleware' => 'authenticated'], function 
 
     Route::post('/tasks/{task}/complete',[TaskController::class,'complete'])->name('tasks.complete');
 
+
+
     // Ajax routes ........
 
     Route::get('getTaskData/{taskId}',[AjaxController::class,'getTaskData']);
