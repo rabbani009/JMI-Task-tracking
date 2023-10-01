@@ -101,12 +101,17 @@ class stageTrackController extends Controller
      */
     public function update(Request $request, $id)
     {
+        
+
             // Validate the form data
             $request->validate([
                 'task_status' => 'required|in:3,4',
                 'start_date' => 'required|date',
                 'fileUpload.*' => 'nullable|mimes:jpeg,jpg,png,gif,pdf,docx', // Note the '.*' to validate each uploaded file
-            ]);
+                'reason_description' => 'required_if:task_status,4', // Require 'reason' when 'task_status' is '4' (Rejected)
+                ], [
+                    'reason_description.required_if' => 'You must provide a reason when selecting "Rejected".',
+                 ]);
 
             // Find the existing stage track record
             $stageTrack = StageTrack::find($id);
@@ -118,6 +123,7 @@ class stageTrackController extends Controller
             // Update the stage track data
             $stageTrack->task_status = $request->input('task_status');
             $stageTrack->start_date = $request->input('start_date');
+            $stageTrack->reason_description = $request->input('reason_description');
             $stageTrack->attachment_title = $request->input('attachTitle');
 
              // Handle file upload if a new file is provided

@@ -118,7 +118,7 @@
                           Reason
                       </th>
                       <th style="width: 8%" class="text-center">
-                           Status
+                           Stage Status
                       </th>
                       <th style="width: 20%">
                       </th>
@@ -149,6 +149,8 @@
                           {{ $data->end_date }}
                       </td>
                       <td class="project_progress">
+
+                      
                         
                       @if (!empty($data->attachments))
                             <?php

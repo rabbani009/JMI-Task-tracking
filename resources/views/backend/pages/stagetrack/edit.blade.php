@@ -16,6 +16,12 @@
 
 <div class="col-md-6">
     <div class="card">
+        
+    <div class="col-md-6 offset-md-6 text-right">
+        <button type="button" class="btn btn-primary" onclick="window.history.back();"><i class="fas fa-caret-left"></i><i class="fas fa-caret-left"></i>  Previous</button>
+    </div>
+
+
         <div class="card-body">
 
             <form action="{{ route('stage.update', $stageTracks->id) }}" method="post" enctype="multipart/form-data">
@@ -44,6 +50,13 @@
                     <label for="start_date">Date:</label>
                     <input type="date" name="start_date" class="form-control" value="{{ $stageTracks->start_date }}">
                 </div>
+
+                
+                <div class="form-group">
+                    <label for="message">Reason(if you select rejected):</label>
+                    <textarea id="message" name="reason_description" class="form-control" rows="4" placeholder="Enter your reason here..."></textarea>
+                </div>
+
 
                 <div class="form-group">
                     <label for="attachTitle">Attachment Title:</label>
