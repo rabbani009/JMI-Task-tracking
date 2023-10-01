@@ -2,6 +2,37 @@
 use App\Models\StageTrack;
 @endphp
 
+<style>
+    .step-list {
+        display: none; /* Initially hide the step list */
+    }
+
+    .step-toggle {
+        cursor: pointer;
+        color: blue; /* Customize the style as needed */
+    }
+
+    /* Style for the expanded step list */
+    .step-list.show {
+        display: block;
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin-top: 5px;
+        background-color: #f5f5f5;
+    }
+
+    /* Style for individual steps */
+    .step {
+        margin-bottom: 5px;
+        background-color: #fff;
+        padding: 5px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+</style>
+
+
+
 <section class="content">
     <div class="card">
         <div class="card-header">
@@ -22,8 +53,8 @@ use App\Models\StageTrack;
                         <th>Task Id</th>
                         <th>SBU</th>
                         <th>Assigned user</th>
-                        <th>Start Date</th>
-                        <th>Expected DueDate</th>        
+                        <th>Task opening Date</th>
+                        <th>Expected Closing Date</th>        
                         <th>No.of Stage</th>     
                         <th>Task Status</th>
                         <th>product Types</th>
@@ -45,10 +76,16 @@ use App\Models\StageTrack;
                         <td>{{ \Carbon\Carbon::parse($row->start_date)->format('Y-m-d') }}</td>
                         <td>{{ \Carbon\Carbon::parse($row->end_date)->format('Y-m-d') }}</td>
                         <td>
-                        @foreach(json_decode($row->task_approved_steps) as $step)
-                            {{ $step }},
-                        @endforeach
+                            <span class="step-toggle">Show Steps</span>
+                            <div class="step-list">
+                                @foreach(json_decode($row->task_approved_steps) as $step)
+                                    <div class="step">
+                                        {{ $step }}
+                                    </div>
+                                @endforeach
+                            </div>
                         </td>
+
                         <td>
                             @php
                                 $taskApprovedSteps = json_decode($row->task_approved_steps, true);
@@ -362,7 +399,14 @@ use App\Models\StageTrack;
     });
 </script>
 
-
+<script>
+    $(document).ready(function() {
+        $(".step-toggle").click(function() {
+            // Toggle the visibility of the step list
+            $(this).siblings(".step-list").toggle();
+        });
+    });
+</script>
 
 
 

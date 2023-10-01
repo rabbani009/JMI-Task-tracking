@@ -66,6 +66,16 @@
                   <li class="list-group-item">
                     <b>Expected Closing Date : </b> <a class="float-right">{{ \Carbon\Carbon::parse($task->end_date)->format('Y-m-d') }}</a>
                   </li>
+                 
+                  <li class="list-group-item">
+                      <b>Target Office :</b>
+                      @php
+                          $a_office = json_decode($task->a_office);
+                          $combinedOffice = implode(', ', $a_office);
+                      @endphp
+                      <a class="float-right">{{ $combinedOffice }}</a>
+                  </li>
+
                 </ul>
 
               </div>
@@ -96,7 +106,7 @@
                           Stage
                       </th>
                       <th style="width: 15%">
-                          Approval Date
+                          Start/Approval/Reject Date
                       </th>
                       <th style="width: 15%">
                           Expected Approval Date
@@ -127,8 +137,10 @@
                           </a>
                           <br/>
                           <small>
-                              Created : {{ $data->created_at }}
+                              created_date : {{ $data->created_at->format('Y-m-d') }}<br />
+                              Updated_date : <span class="badge badge-warning">{{ $data->updated_at->format('Y-m-d') }}</span>
                           </small>
+
                       </td>
                       <td>
                           {{ $data->start_date }}
@@ -169,15 +181,15 @@
                     @if(auth()->user()->role->slug != 'system_admin')  
                       <td class="project-actions text-right">
                           
-                          <a class="btn btn-info btn-sm" href="#">
+                          <a class="btn btn-info btn-sm" href="{{ route('stage.edit', ['stage' => $data->id]) }}">
                               <i class="fas fa-pencil-alt">
                               </i>
-                              Edit
+                            
                           </a>
                           <a class="btn btn-danger btn-sm" href="#">
                               <i class="fas fa-trash">
                               </i>
-                              Delete
+                             
                           </a>
                       </td>
                     @endif

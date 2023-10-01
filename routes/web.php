@@ -61,6 +61,10 @@ Route::group(['prefix' => 'backend', 'middleware' => 'authenticated'], function 
     Route::resource('task', TaskController::class);
     Route::resource('stage', StageTrackController::class);
 
+
+
+    //Task Finished.........
+
     Route::post('/tasks/{task}/complete',[TaskController::class,'complete'])->name('tasks.complete');
 
 
