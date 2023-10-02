@@ -17,7 +17,7 @@
             class="nav-item @if($commons['main_menu'] == 'report') menu-open @endif"
         >
              <a
-                href="#"
+                href="{{ route('report.index')}}"
                 class="nav-link @if($commons['current_menu'] == 'Activity-report') active @endif"
             >
                 <i class="fa fa-sticky-note" style="font-size: 15px"></i>

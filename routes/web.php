@@ -15,7 +15,9 @@ use App\Http\Controllers\BackendControllers\{
     SbuController,
     TaskController,
     AjaxController,
-    StageTrackController
+    StageTrackController,
+    ReportController,
+    SearchController
 
 
   
@@ -60,12 +62,21 @@ Route::group(['prefix' => 'backend', 'middleware' => 'authenticated'], function 
     Route::resource('sbu', SbuController::class);
     Route::resource('task', TaskController::class);
     Route::resource('stage', StageTrackController::class);
-
-
+    Route::resource('report', ReportController::class);
 
     //Task Finished.........
 
     Route::post('/tasks/{task}/complete',[TaskController::class,'complete'])->name('tasks.complete');
+
+    //Search filtered items
+
+     Route::get('/filter-task-wise-data',[SearchController::class,'search']);
+
+     Route::get('/filter-sbu-wise-data',[SearchController::class,'searchsbu']);
+
+     Route::get('/filter-person-wise-data',[SearchController::class,'searchperson']);
+
+     Route::get('/filter-product-wise-data',[SearchController::class,'searchproduct']);
 
 
 

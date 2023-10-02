@@ -29,6 +29,10 @@ use App\Models\StageTrack;
         border: 1px solid #ddd;
         border-radius: 4px;
     }
+    .table thead th {
+        background-color: #E4F1FF; 
+        color: #333; 
+    }
 </style>
 
 
