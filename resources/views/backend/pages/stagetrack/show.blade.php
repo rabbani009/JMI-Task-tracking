@@ -96,7 +96,7 @@
        
 
         <div class="card-body">
-            <table class="table table-responsive-md table-responsive-lg table-responsive-md text-center">
+            <table class="table table-responsive-md table-responsive-lg table-responsive-md table-bordered text-center">
               <thead>
                   <tr>
                       <th style="width: 1%">

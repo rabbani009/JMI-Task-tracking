@@ -14,9 +14,10 @@ use App\Models\StageTrack;
 
 @section('content')
 <section class="content">
+  <div class="card">
     <div class="row">
         <div class="col-md-12">
-            <div class="card card-primary card-outline">
+            
                 <div class="card-body">
                     <div class="card bg-gray-light">
                         <div class="card-header">
@@ -113,73 +114,73 @@ use App\Models\StageTrack;
                             </div>
                         </div>
                     </div>
-                
-
-        <div class="card-body p-0">
-            <table class="table table-bordered table-hover"">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Task Title</th>
-                        <th>SBU</th>
-                        <th>User</th>
-                        <th>Belongs office</th>
-                        <th>Task Status</th>
-                        <th>Product Type</th>
-                    </tr>
-                </thead>
-                <tbody id="tableBody">
-                 @foreach ($taskall as $row)
-                        <tr>
-                            <td>{{ $row->id }}</td>
-                            <td>{{ $row->task_title }}</td>
-                            <td>{{ $row->sbu->name }}</td>
-                            <td>{{ $row->user->name }}</td>
-                            <td>
-                            @foreach(json_decode($row->a_office) as $step)
-                                {{ $step }},
-                            @endforeach
-                            </td>
-                            <td>
-                                @php
-                                    $taskApprovedSteps = json_decode($row->task_approved_steps, true);
-
-                                    $approvedStages = StageTrack::where('task_id', $row->task_id)
-                                        ->whereIn('stage_status', $taskApprovedSteps)
-                                        ->where('task_status', 3)
-                                        ->get();
-                                        
-                                    
-                                        foreach ($approvedStages as $stage) {
-                                            
-                                            }
-
-                                    $allStagesApproved = $approvedStages->count() === count($taskApprovedSteps);
-                                    $anyStages = $row->stageTracks->isNotEmpty();
-                                @endphp
-
-                                @if ($allStagesApproved)
-                                    <span class="badge badge-pill badge-success">Approved</span>
-                                @elseif ($anyStages)
-                                    <span class="badge badge-pill badge-info">On-Progress</span>
-                                @else
-                                    <span class="badge badge-pill badge-warning">Not Started</span>
-                                @endif
-                        </td>
-                            <td>{{ $row->p_type }}</td>
-                        </tr>
-                   @endforeach
-                </tbody>
-            </table>
-        </div>
-            <div class="card-footer">
-                {{ $taskall->withQueryString()->links('pagination::bootstrap-5') }}
-            </div>
-                 
                 </div>
-            </div>
+
+                <div class="card-body">
+                   <table class="table table-responsive-md table-responsive-lg table-responsive-md table-bordered text-center">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Task Title</th>
+                                <th>SBU</th>
+                                <th>User</th>
+                                <th>Belongs office</th>
+                                <th>Task Status</th>
+                                <th>Product Type</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                        @foreach ($taskall as $row)
+                                <tr>
+                                    <td>{{ $row->id }}</td>
+                                    <td>{{ $row->task_title }}</td>
+                                    <td>{{ $row->sbu->name }}</td>
+                                    <td>{{ $row->user->name }}</td>
+                                    <td>
+                                    @foreach(json_decode($row->a_office) as $step)
+                                        {{ $step }},
+                                    @endforeach
+                                    </td>
+                                    <td>
+                                        @php
+                                            $taskApprovedSteps = json_decode($row->task_approved_steps, true);
+
+                                            $approvedStages = StageTrack::where('task_id', $row->task_id)
+                                                ->whereIn('stage_status', $taskApprovedSteps)
+                                                ->where('task_status', 3)
+                                                ->get();
+                                                
+                                            
+                                                foreach ($approvedStages as $stage) {
+                                                    
+                                                    }
+
+                                            $allStagesApproved = $approvedStages->count() === count($taskApprovedSteps);
+                                            $anyStages = $row->stageTracks->isNotEmpty();
+                                        @endphp
+
+                                        @if ($allStagesApproved)
+                                            <span class="badge badge-pill badge-success">Approved</span>
+                                        @elseif ($anyStages)
+                                            <span class="badge badge-pill badge-info">On-Progress</span>
+                                        @else
+                                            <span class="badge badge-pill badge-warning">Not Started</span>
+                                        @endif
+                                </td>
+                                    <td>{{ $row->p_type }}</td>
+                                </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card-footer">
+                    {{ $taskall->withQueryString()->links('pagination::bootstrap-5') }}
+                </div>
+                            
         </div>
     </div>
+  </div>
 </section>
 @endsection
 

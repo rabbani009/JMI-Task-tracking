@@ -47,6 +47,7 @@ class DashboardController extends Controller
 
             $tasks = Task::where('status', 1)
             ->where('user_id', auth()->user()->id)
+            ->where('task_status', 0)
             ->orderBy('id', 'desc')
             ->with(['sbu','user','createdBy', 'updatedBy','stageTracks'])->paginate(7);
     

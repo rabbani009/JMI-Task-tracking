@@ -2,6 +2,8 @@
 use App\Models\StageTrack;
 @endphp
 
+
+
 @extends('backend')
 
 @section('page_level_css_plugins')
@@ -17,6 +19,8 @@ use App\Models\StageTrack;
     .clickable-row {
         cursor: pointer;
     }
+    .finished-row {
+            background-color: #c8e6c9; 
     </style>
 @endsection
 
@@ -56,14 +60,16 @@ use App\Models\StageTrack;
                       <th class="clickable-task">Task</th>
                       <th class="clickable-sbu">SBU</th>
                       <th class="clickable-status">Task Status</th>
+                      @if(auth()->user()->user_type === 'system' || auth()->user()->user_type === 'admin')
                       <th class="clickable-finished-task">Finished Task</th>
+                      @endif
 
                      
                     </tr>
                   </thead>
                   <tbody>
                     @foreach($tasks as $row)
-                    <tr class="clickable-row" data-href="{{ route('stage.show', $row->task_id) }}" data-task-id="{{ $row->task_id }}" data-user-role="{{ auth()->user()->role->slug }}" data-task-status="{{ $row->getTaskStatus() }}">
+                    <tr class="clickable-row {{ $row->task_status === 3 ? 'finished-row' : '' }}" data-href="{{ route('stage.show', $row->task_id) }}" data-task-id="{{ $row->task_id }}" data-user-role="{{ auth()->user()->role->slug }}" data-task-status="{{ $row->getTaskStatus() }}">
                       <td>{{ $loop->iteration }}.</td>
                       <td class="clickable-task">{{ $row->task_title }}</td>
                       <td class="clickable-sbu">{{ $row->sbu->name }}</td>
@@ -94,8 +100,9 @@ use App\Models\StageTrack;
                                 <span class="badge badge-pill badge-warning">Not Started</span>
                             @endif
                       </td>
-
+                      @if(auth()->user()->user_type === 'system' || auth()->user()->user_type === 'admin')
                       <td>
+                    
                         <form method="POST" action="{{ route('tasks.complete', $row) }}" class="toggle-task-status-form">
                             @csrf
                             @method('POST')
@@ -110,8 +117,9 @@ use App\Models\StageTrack;
                                 </span>
                             </button>
                         </form>
+                      
                       </td>
-
+                      @endif
 
                       
                     </tr>
