@@ -24,8 +24,8 @@ class TaskController extends Controller
     {
         $commons['page_title'] = 'Task';
         $commons['content_title'] = 'List of All Task';
-        $commons['main_menu'] = 'task';
-        $commons['current_menu'] = 'task';
+        $commons['main_menu'] = 'main_task';
+        $commons['current_menu'] = 'task_all';
 
 
         $users = auth()->user();
@@ -80,8 +80,8 @@ class TaskController extends Controller
     {
         $commons['page_title'] = 'Task';
         $commons['content_title'] = 'Add new Task';
-        $commons['main_menu'] = 'task';
-        $commons['current_menu'] = 'task';
+        $commons['main_menu'] = 'main_task';
+        $commons['current_menu'] = 'task_create';
 
         $sbus = Sbu::where('status', 1)
         //  ->where('id', auth()->user()->belongs_to)

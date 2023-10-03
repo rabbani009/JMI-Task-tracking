@@ -5,7 +5,20 @@
 @endsection
 
 @section('page_level_css_files')
-    
+<style>
+  .justify-text {
+     
+      white-space: pre-wrap;
+  }
+  .justify-text::after {
+      content: '';
+      display: inline-block;
+      width: 100%;
+      height: 0;
+      visibility: hidden;
+  }
+</style>
+  
 @endsection
 
 @section('content')
@@ -121,6 +134,7 @@
                            Stage Status
                       </th>
                       <th style="width: 20%">
+                          Update Progress
                       </th>
                       
                   </tr>
@@ -167,8 +181,20 @@
 
                      </td>
 
-                     <td>{{ $data->reason_description }}</td>
-                     
+                      <td>
+                          <div class="truncate-text">
+                              @if (strlen($data->reason_description) > 0) <!-- Show the "View More" button if content is not empty -->
+                                  <span class="truncated-text">{{ substr($data->reason_description, 0, 50) }}...</span>
+                                  <button class="btn btn-link view-more-btn" data-toggle="collapse" data-target="#reason-{{ $data->id }}">View More</button>
+                                  <div id="reason-{{ $data->id }}" class="collapse card">
+                                      <div class="card-body justify-text">
+                                          {{ $data->reason_description }}
+                                      </div>
+                                  </div>
+                              @endif
+                          </div>
+                      </td>
+                  
                       <td class="project-state">
                            @if($data->task_status == 1)
                                  <span class="badge badge-pill badge-info"> Started </span>
@@ -181,18 +207,18 @@
                             @endif
                       </td>
                     @if(auth()->user()->role->slug != 'system_admin')  
-                      <td class="project-actions text-right">
+                      <td class="project-actions text-center">
                           
                           <a class="btn btn-info btn-sm" href="{{ route('stage.edit', ['stage' => $data->id]) }}">
                               <i class="fas fa-pencil-alt">
                               </i>
                             
                           </a>
-                          <a class="btn btn-danger btn-sm" href="#">
+                          <!-- <a class="btn btn-danger btn-sm" href="#">
                               <i class="fas fa-trash">
                               </i>
                              
-                          </a>
+                          </a> -->
                       </td>
                     @endif
                   </tr>

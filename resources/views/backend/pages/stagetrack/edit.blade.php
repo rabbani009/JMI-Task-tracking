@@ -54,7 +54,7 @@
                 
                 <div class="form-group">
                     <label for="message">Reason(if you select rejected):</label>
-                    <textarea id="message" name="reason_description" class="form-control" rows="4" placeholder="Enter your reason here..."></textarea>
+                    <textarea id="message" name="reason_description" class="form-control" rows="4" placeholder="Enter your reason here...">{{ $stageTracks->reason_description }}</textarea>
                 </div>
 
 

@@ -21,8 +21,8 @@ class SbuController extends Controller
     {
         $commons['page_title'] = 'Sbus';
         $commons['content_title'] = 'List of All Sbus';
-        $commons['main_menu'] = 'sbu';
-        $commons['current_menu'] = 'sbu';
+        $commons['main_menu'] = 'sbu1';
+        $commons['current_menu'] = 'page_sbu';
 
         $sbus = Sbu::where('status', 1)
         ->with(['createdBy', 'updatedBy'])
@@ -47,8 +47,8 @@ class SbuController extends Controller
     {
         $commons['page_title'] = 'Sbus';
         $commons['content_title'] = 'Create Sbus';
-        $commons['main_menu'] = 'sbu';
-        $commons['current_menu'] = 'sbu';
+        $commons['main_menu'] = 'sbu_create';
+        $commons['current_menu'] = 'create_sbu';
 
         return view('backend.pages.sbu.create',
         compact(

@@ -20,7 +20,7 @@ class ReportController extends Controller
         $commons['page_title'] = 'Report';
         $commons['content_title'] = 'Generate All Report';
         $commons['main_menu'] = 'report';
-        $commons['current_menu'] = 'report';
+        $commons['current_menu'] = 'page_report';
 
 
         $tasks = Task::where('status', 1)->pluck('task_title', 'id');
@@ -29,10 +29,6 @@ class ReportController extends Controller
 
         $taskall = Task::paginate(7);
     
-
-
-
-
 
             return view('backend.pages.report.report-view',
             compact(
