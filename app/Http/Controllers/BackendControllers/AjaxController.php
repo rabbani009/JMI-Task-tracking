@@ -99,9 +99,9 @@ public function saveTaskTrackData(Request $request)
             $stageTrack->save();
 
             // Return a response indicating success or any other necessary information
-            // return response()->json(['message' => 'Task track data saved successfully']);
+            return response()->json(['message' => 'Task track data saved successfully']);
 
-            return redirect()->back()->with('success', 'Task track data updated successfully.');
+            // return redirect()->back()->with('success', 'Task track data updated successfully.');
         }
 
     

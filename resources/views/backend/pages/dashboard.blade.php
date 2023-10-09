@@ -383,27 +383,43 @@ document.addEventListener("DOMContentLoaded", function() {
 </script>
 
 <script>
-    $(document).ready(function() {
-        // Function to clear the form fields
-        function clearFormFields() {
-         
-            $('#stageStatus').val('');
-            $('#taskStatus').val('');
-            $('#dynamicContent').html('');
-            $('#attachTitle').val('');
-            $('#fileUpload').val('');
-        }
+  
+  $(document).ready(function() {
+    function clearFormFields() {
+        $('#stageStatus').val('');
+        $('#taskStatus').val('');
+        $('#dynamicContent').html('');
+        $('#attachTitle').val('');
+        $('#fileUpload').val('');
+    }
 
-        // Clear the form when the modal is opened
-        $('#modal-lg').on('show.bs.modal', function() {
-            clearFormFields();
-        });
+    function clearSuccessMessage() {
+        console.log('Clearing success message');
+        $('#successMessage').text('');
+    }
+    function taskStatusError(){
+        console.log('Clearing Error message');
+        $('#taskStatusError').text('');
+    }
 
-        // Clear the form when the modal is closed
-        $('#modal-lg').on('hidden.bs.modal', function() {
-            clearFormFields();
-        });
+    function stageStatusError(){
+        console.log('Clearing stagestatus message');
+        $('#stageStatusError').text('');
+    }
+
+    $('#modal-lg').on('show.bs.modal', function() {
+        clearFormFields();
+        clearSuccessMessage();
+        taskStatusError();
+        stageStatusError();
+
     });
+
+    $('#modal-lg').on('hidden.bs.modal', function() {
+        clearFormFields();
+    });
+});
+   
 </script>
 
 
