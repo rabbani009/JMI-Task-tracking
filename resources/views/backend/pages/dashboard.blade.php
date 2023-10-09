@@ -383,6 +383,31 @@ document.addEventListener("DOMContentLoaded", function() {
 </script>
 
 <script>
+    $(document).ready(function() {
+        // Function to clear the form fields
+        function clearFormFields() {
+         
+            $('#stageStatus').val('');
+            $('#taskStatus').val('');
+            $('#dynamicContent').html('');
+            $('#attachTitle').val('');
+            $('#fileUpload').val('');
+        }
+
+        // Clear the form when the modal is opened
+        $('#modal-lg').on('show.bs.modal', function() {
+            clearFormFields();
+        });
+
+        // Clear the form when the modal is closed
+        $('#modal-lg').on('hidden.bs.modal', function() {
+            clearFormFields();
+        });
+    });
+</script>
+
+
+<script>
 
     $(document).ready(function() {
         // Handle "Mark as Finished" button clicks

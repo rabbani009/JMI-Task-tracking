@@ -210,7 +210,7 @@ use App\Models\StageTrack;
                 <form id="reasonForm"  method="POST">
                     @csrf
                     <!-- Include a hidden input field for task_id -->
-                    <input type="hidden" name="task_id" value="{{ $row->task_id }}">
+                    <input type="hidden" name="task_id" value="{{ isset($row) ? $row->remarks : '' }}">
                     <div class="form-group">
                         <label for="reason">Reason:</label>
                         <textarea class="form-control" id="reason" name="reason" rows="4">{{ $row->remarks ?? '' }}</textarea>
