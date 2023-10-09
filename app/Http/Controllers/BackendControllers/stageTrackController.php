@@ -122,7 +122,7 @@ class stageTrackController extends Controller
 
             // Update the stage track data
             $stageTrack->task_status = $request->input('task_status');
-            $stageTrack->start_date = $request->input('start_date');
+            $stageTrack->updated_start_date = $request->input('start_date');
             $stageTrack->reason_description = $request->input('reason_description');
             $stageTrack->attachment_title = $request->input('attachTitle');
 

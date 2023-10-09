@@ -79,6 +79,7 @@
                   <li class="list-group-item">
                     <b>Expected Closing Date : </b> <a class="float-right">{{ \Carbon\Carbon::parse($task->end_date)->format('Y-m-d') }}</a>
                   </li>
+                  
                  
                   <li class="list-group-item">
                       <b>Target Office :</b>
@@ -151,6 +152,9 @@
                       <th style="width: 15%">
                           Expected Approval Date
                       </th>
+                      <th style="width: 15%">
+                          Updated Start/Approval/Reject Date
+                      </th>
                       <th>
                           Attachments
                       </th>
@@ -188,6 +192,9 @@
                       </td>
                       <td>
                           {{ $data->end_date }}
+                      </td>
+                      <td>
+                          {{ $data->Updated_start_date }}
                       </td>
                       <td class="project_progress">
 
