@@ -88,8 +88,17 @@
                                     <option value="Price approval">Price approval</option>
                                     <option value="Marketing Authorization">Marketing Authorization</option>
                                     <option value="Inspection">Inspection</option>
+
                                     <option value="Meeting Date">Meeting Date</option>
-                                </select>
+
+                                    <option value="recipe approved">recipe approved</option>
+
+                                    <option value="brand name approved">brand name approved</option>
+
+                                    <option value="packaging approved">packaging approved</option>
+
+                                    <option value="registration process completed">registration process completed</option>
+                               </select>
                             </div>
                         </div>
                         </div>

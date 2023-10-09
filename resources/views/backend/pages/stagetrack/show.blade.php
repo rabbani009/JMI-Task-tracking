@@ -89,6 +89,33 @@
                       <a class="float-right">{{ $combinedOffice }}</a>
                   </li>
 
+                  <li class="list-group-item">
+                       <b>Time Left :</b>
+                       
+                        <a class="float-right">
+                            @php
+                                $expectedClosingDate = \Carbon\Carbon::parse($task->end_date);
+                                $currentDate = \Carbon\Carbon::now();
+
+                                if ($currentDate->gt($expectedClosingDate)) {
+                                    // The current date is greater than the expected closing date, so it's finished.
+                                    echo "Time finished";
+                                } else {
+                                    // Calculate the days remaining, considering years, months, and days.
+                                    $diff = $expectedClosingDate->diff($currentDate);
+                                    $daysRemaining = $diff->format('%m months,%d days');
+                                    echo $daysRemaining . " left";
+                                }
+                            @endphp
+                          </a>
+                  </li>
+
+                  @if(!empty($task->remarks))
+                      <li class="list-group-item">
+                          <b style="color:red">Issuees Reason:</b><a class="float-right">{{ $task->remarks }}</a>
+                      </li>
+                  @endif
+
                 </ul>
 
               </div>

@@ -54,7 +54,6 @@ use App\Models\StageTrack;
                     <tr>
                         <th style="width: 10px">#</th>
                         <th>Task Title</th>
-                        <th>Task Id</th>
                         <th>SBU</th>
                         <th>Assigned user</th>
                         <th>Task opening Date</th>
@@ -64,6 +63,7 @@ use App\Models\StageTrack;
                         <th>product Types</th>
                         <th>product class</th>
                         <th>Target office</th>
+                        <th>Remarks</th>
 
 
                         <th class="custom_actions">Actions</th>
@@ -74,7 +74,6 @@ use App\Models\StageTrack;
                     <tr>
                         <td>{{ $loop->iteration }}.</td>
                         <td>{{ $row->task_title}}</td>
-                        <td>{{ $row->task_id}}</td>
                         <td>{{ $row->sbu->name}}</td>
                         <td>{{ $row->user->name}}</td>
                         <td>{{ \Carbon\Carbon::parse($row->start_date)->format('Y-m-d') }}</td>
@@ -125,19 +124,49 @@ use App\Models\StageTrack;
                         @endforeach
                         </td>
 
+                        <td>
+                            @php
+                                    $expectedClosingDate = \Carbon\Carbon::parse($row->end_date);
+                                    $currentDate = \Carbon\Carbon::now();
+
+                                    if ($currentDate->gt($expectedClosingDate)) {
+                                        // The current date is greater than the expected closing date, so it's finished.
+                                        echo "Time finished";
+                                    } else {
+                                        // Calculate the days remaining, considering years, months, and days.
+                                        $diff = $expectedClosingDate->diff($currentDate);
+                                        $daysRemaining = $diff->format('%m months, %d days');
+                                        echo $daysRemaining . " left";
+                                    }
+                                @endphp
+                        </td>
+
                         <td class="custom_actions">
                             <div class="btn-group">
                                 <a href="{{ route('stage.show', $row->task_id) }}" class="btn btn-flat btn-outline-primary btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="View">
                                     <i class="far fa-eye"></i>
-                                </a>    
+                                </a>
+                                    
                             @if(auth()->user()->role->slug != 'sbu_admin')      
                                 <a href="" class="btn btn-flat btn-outline-info btn-sm" data-toggle="tooltip" title="Edit">
                                    <i class="far fa-edit"></i>
                                 </a>
                             @endif
-                            <!-- <a href="#" type="button" class="btn btn-flat btn-outline-info btn-sm notify-btn" data-toggle="modal" data-target="#modal-lg" data-task-id="{{ $row->task_id }}" title="Notify">
-                                <i class="fa fa-plus-square"></i>
-                            </a> -->
+
+                            @if(auth()->user()->role->slug == 'sbu_admin') 
+
+                            <a href="#" type="button" class="btn btn-flat btn-outline-info btn-sm notify-btn open-reason-modal"
+                            data-toggle="modal"
+                            data-target="#reasonModal"
+                            data-task-id="{{ $row->task_id }}"
+                            data-remarks="{{ $row->remarks }}"
+                            title="Notify">
+                            <i class="fa fa-plus-square"></i> Reason
+                            </a>
+
+
+
+                            @endif
                                                         
                            @if(auth()->user()->role->slug != 'sbu_admin') 
                                 <form method="post" class="list_delete_form" action="" accept-charset="UTF-8" >
@@ -167,113 +196,37 @@ use App\Models\StageTrack;
 
    <!-- /.modal -->
 
-   <div class="modal fade" id="modal-lg">
-        <div class="modal-dialog modal-lg">
-          <div class="modal-content">
+   <!-- Modal for Add/Update Reason -->
+   <div class="modal fade" id="reasonModal" tabindex="-1" role="dialog" aria-labelledby="reasonModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
             <div class="modal-header">
-              <h4 class="modal-title">Task Track</h4>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
+                <h5 class="modal-title" id="reasonModalLabel">Add/Update Reason</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body">
-            <span id="successMessage" class="text-success" style ="text-align:center"></span> <!-- Error message for Stage status -->
-                 <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="taskID">Task Title</label>
-                            <input type="text"  class="form-control" id="taskTitle" readonly>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="taskID">Task ID</label>
-                            <input type="text"  class="form-control" id="taskID" readonly>
-                        </div>
-                    </div>
-                   
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
+                <form id="reasonForm"  method="POST">
+                    @csrf
+                    <!-- Include a hidden input field for task_id -->
+                    <input type="hidden" name="task_id" value="{{ $row->task_id }}">
                     <div class="form-group">
-                            <label for="taskSBU">SBU</label>
-                            <input type="text"  class="form-control" id="taskSBU" readonly>
-                        </div>
+                        <label for="reason">Reason:</label>
+                        <textarea class="form-control" id="reason" name="reason" rows="4">{{ $row->remarks ?? '' }}</textarea>
                     </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="stageStatus">Notify stage Status</label>
-                    <select class="form-control" id="stageStatus">
-
-                        <option value="">Select stage status</option>
-                     
-                    </select>
-                <span id="stageStatusError" class="text-danger"></span> <!-- Error message for Stage status -->
-                </div>
-
-                <div class="form-group">
-                    <label for="office">Notify Task status</label>
-                    <select class="form-control" id="taskStatus">
-                        <option value="">Select Task status</option>
-                        <option value="1">Started</option>
-                        <option value="2">Working</option>
-                        <option value="3">Completed</option>
-                        <option value="4">Rejected</option>
-                    </select>
-                <span id="taskStatusError" class="text-danger"></span> <!-- Error message for Task status -->
-                </div>
-               
-
-                <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group @if ($errors->has('start_date')) has-error @endif">
-                                <label for="">Date of Approval *</label>
-                                <div class="input-group date" id="start_date" data-target-input="nearest">
-                                    <input value="{{ old('start_date') }}" type="text" name="start_date" class="form-control datetimepicker-input" data-target="#start_date" autocomplete="off" placeholder="YYYY-MM-DD">
-                                    <div class="input-group-append" data-target="#start_date" data-toggle="datetimepicker">
-                                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                    </div>
-                                </div>
-                                @if($errors->has('start_date'))
-                                    <span class="error invalid-feedback">{{ $errors->first('start_date') }}</span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="form-group @if ($errors->has('end_date')) has-error @endif">
-                                <label for="">Expected date of Approval *</label>
-                                <div class="input-group date" id="end_date" data-target-input="nearest">
-                                    <input type="text" name="end_date" value="{{ old('end_date') }}" class="form-control datetimepicker-input" data-target="#end_date" autocomplete="off" placeholder="YYYY-MM-DD">
-                                    <div class="input-group-append" data-target="#end_date" data-toggle="datetimepicker">
-                                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                    </div>
-                                </div>
-                                @if($errors->has('end_date'))
-                                    <span class="error invalid-feedback">{{ $errors->first('end_date') }}</span>
-                                @endif
-                            </div>
-                        </div>
-                </div>
-
-
-                <div class="form-group">
-                    <label for="fileUpload">Attachment(if any)</label>
-                    <input type="file" class="form-control-file" id="fileUpload">
-                </div>
-                <!-- Add other task fields as needed -->
+                </form>
             </div>
-            <div class="modal-footer justify-content-between">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary" id="saveChangesBtn">New Productivity</button>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" form="reasonForm" class="btn btn-primary">Save</button>
             </div>
-          </div>
-          <!-- /.modal-content -->
         </div>
-        <!-- /.modal-dialog -->
-      </div>
-      <!-- /.modal -->
+    </div>
+  </div>
+
+
+
 
 </section>
 
@@ -281,127 +234,7 @@ use App\Models\StageTrack;
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<script>
 
-    $(document).ready(function() {
-        $(".notify-btn").on("click", function() {
-            var taskId = $(this).data("task-id");
-
-            $.ajax({
-                url: "getTaskData/" + taskId,
-                method: "GET",
-                success: function(response) {
-                    // Update the modal fields with the retrieved data
-                    $("#taskTitle").val(response.task_title);
-                    $("#taskID").val(response.task_id);
-                      // Check if SBU data exists in the response
-                        if (response.sbu) {
-                            $("#taskSBU").val(response.sbu.name); // Populate the SBU name
-                        } else {
-                            $("#taskSBU").val(''); // Clear the SBU name field if no SBU data found
-                        }
-
-                    // Convert the start_date and end_date strings to Date objects
-                    var startDate = new Date(response.start_date);
-                    var endDate = new Date(response.end_date);
-
-                    // Format the dates as "YYYY-MM-DD"
-                    var formattedStartDate = formatDate(startDate);
-                    var formattedEndDate = formatDate(endDate);
-
-                    $("#startDate").val(formattedStartDate);
-                    $("#endDate").val(formattedEndDate);
-    
-                    // Parse the JSON string for task_approved_steps
-                var approvedSteps = JSON.parse(response.task_approved_steps);
-
-                // Add the approvedSteps as options to the taskStatus dropdown
-
-                var taskStatusDropdown = $("#stageStatus");
-                taskStatusDropdown.empty(); // Clear existing options
-                approvedSteps.forEach(function(step) {
-                taskStatusDropdown.append('<option value="' + step + '">' + step + '</option>');
-                });
-
-                    // Show the modal
-                    $("#modal-lg").modal("show");
-                },
-                error: function(error) {
-                    console.log("Error fetching task data:", error);
-                }
-                
-            });
-                function formatDate(date) {
-                    var year = date.getFullYear();
-                    var month = String(date.getMonth() + 1).padStart(2, '0');
-                    var day = String(date.getDate()).padStart(2, '0');
-                    return year + '-' + month + '-' + day;
-                }
-        });
-
-            // Handling stage_track form submission
-            $("#saveChangesBtn").on("click", function() {
-
-                var $button = $(this); // Store a reference to the button
-                console.log("Button clicked");
-                
-                // Disable the button to prevent multiple clicks
-                $button.prop("disabled", true);
-
-            var formData = new FormData();
-            formData.append('_token', $('meta[name="csrf-token"]').attr('content'));
-            formData.append('task_id', $("#taskID").val());
-            formData.append('task_status', $("#taskStatus").val());
-             formData.append('stage_status', $("#stageStatus").val());
-            formData.append('start_date', $("#start_date input").val());
-            formData.append('end_date', $("#end_date input").val());
-
-               // Append multiple attachments (if any)
-                var attachmentFiles = $("#fileUpload")[0].files;
-                for (var i = 0; i < attachmentFiles.length; i++) {
-                    formData.append('attachments[]', attachmentFiles[i]); // Use 'attachments[]' key here
-                }
-
-            // AJAX post request to save the data
-            $.ajax({
-                url: "saveTaskTrackData",
-                method: "POST",
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function(response) {
-                    // Handle the success response here, e.g., show a success message
-                    console.log("Data saved successfully:", response);
-                       // Clear error messages
-                    $("#taskStatusError").text("");
-                    $("#stageStatusError").text("");
-
-                    // Display a success message at the top of the modal
-                     $("#successMessage").text("Data saved successfully").removeClass("d-none");
-                },
-                error: function(error) {
-                    console.log("Error saving task track data:", error);
-
-                        // Handle the error response here
-                        if (error.responseJSON && error.responseJSON.message) {
-                            // Display error messages below the input fields
-                            if (error.responseJSON.message.includes("same data already exists")) {
-                                $("#taskStatusError").text("A record with the same data already exists.");
-                            } else if (error.responseJSON.message.includes("already exists with a different task_status")) {
-                                $("#stageStatusError").text("You have already give the entry");
-                            }
-                        }
-                },
-                complete: function() {
-                     // Re-enable the button after the AJAX request is complete
-                    console.log("Request complete");
-                    $button.prop("disabled", false);
-                }
-            });
-        });
-    
-    });
-</script>
 
 <script>
     $(document).ready(function() {
@@ -410,6 +243,33 @@ use App\Models\StageTrack;
             $(this).siblings(".step-list").toggle();
         });
     });
+</script>
+
+
+<script>
+// Make an AJAX POST request when the form is submitted
+
+
+$(document).ready(function() {
+    // Add a click event listener to the modal trigger buttons
+    $('.open-reason-modal').on('click', function() {
+        // Get the task_id and remarks from data attributes
+        const task_id = $(this).data('task-id');
+        const remarks = $(this).data('remarks');
+        
+        // Update the form action URL with the correct task_id
+        const url = "{{ route('updateReason', ['task_id' => '__task_id__']) }}";
+        const updatedUrl = url.replace('__task_id__', task_id);
+        $('#reasonForm').attr('action', updatedUrl);
+
+        // Set the task_id and remarks in the form input fields
+        $('#reasonForm input[name="task_id"]').val(task_id);
+        $('#reason').val(remarks);
+    });
+});
+
+
+  
 </script>
 
 

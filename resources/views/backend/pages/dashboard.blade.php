@@ -21,6 +21,7 @@ use App\Models\StageTrack;
     }
     .finished-row {
             background-color: #c8e6c9; 
+    }
     </style>
 @endsection
 

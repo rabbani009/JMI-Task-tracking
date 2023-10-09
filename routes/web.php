@@ -8,6 +8,7 @@ use App\Http\Controllers\AuthControllers\{
     LogoutController,
     RegisterController,
     ResetPasswordController,
+
 };
 use App\Http\Controllers\BackendControllers\{
     
@@ -17,7 +18,9 @@ use App\Http\Controllers\BackendControllers\{
     AjaxController,
     StageTrackController,
     ReportController,
-    SearchController
+    SearchController,
+    PDFController,
+    ReasonController
 
 
   
@@ -68,6 +71,13 @@ Route::group(['prefix' => 'backend', 'middleware' => 'authenticated'], function 
 
     Route::post('/tasks/{task}/complete',[TaskController::class,'complete'])->name('tasks.complete');
 
+
+    Route::post('/update-reason/{task_id}', [ReasonController::class, 'update'])->name('updateReason');
+
+
+
+   
+
     //Search filtered items
 
      Route::get('/filter-task-wise-data',[SearchController::class,'search']);
@@ -79,12 +89,16 @@ Route::group(['prefix' => 'backend', 'middleware' => 'authenticated'], function 
      Route::get('/filter-product-wise-data',[SearchController::class,'searchproduct']);
 
 
+     //PDF routes.........
+
+      Route::get('/generate-pdf', [PDFController::class, 'generatePDF'])->name('generate-pdf');
+
 
     // Ajax routes ........
 
-    Route::get('getTaskData/{taskId}',[AjaxController::class,'getTaskData']);
+      Route::get('getTaskData/{taskId}',[AjaxController::class,'getTaskData']);
 
-    Route::post('saveTaskTrackData', [AjaxController::class, 'saveTaskTrackData']);
+      Route::post('saveTaskTrackData', [AjaxController::class, 'saveTaskTrackData']);
 
 
 

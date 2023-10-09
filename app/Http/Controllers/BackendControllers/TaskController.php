@@ -42,17 +42,19 @@ class TaskController extends Controller
         if($user_type=='system'){
 
             $tasks = Task::where('status', 1)
+            ->orderBy('id', 'desc')
             ->with(['sbu', 'user', 'createdBy', 'updatedBy', 'stageTracks'])         
-            ->paginate(3);
+            ->paginate(7);
 
             
 
         }else{
 
             $tasks = Task::where('status', 1)
+            ->orderBy('id', 'desc')
             ->where('user_id', auth()->user()->id)
             ->with(['sbu', 'user', 'createdBy', 'updatedBy', 'stageTracks'])  
-            ->paginate(3);
+            ->paginate(7);
     
             // dd($tasks);
 
