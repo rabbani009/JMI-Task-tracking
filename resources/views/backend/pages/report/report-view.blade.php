@@ -34,7 +34,7 @@ use App\Models\StageTrack;
 
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="filter_task">Task Wise</label>
                                     <select class="form-control select-select2" id="filter_task">
@@ -46,7 +46,7 @@ use App\Models\StageTrack;
                                 </div>
                             </div>
 
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="filter_sbu">SBU Wise</label>
                                     <select class="form-control select-select2" id="filter_sbu" style="width: 100%;">
@@ -57,8 +57,21 @@ use App\Models\StageTrack;
                                     </select>
                                 </div>
                             </div>
+                        </div>
+                          
 
-                            <div class="col-md-4">
+                        <div class="row">
+                            <!-- <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="filter_status">Status Wise</label>
+                                    <select class="form-control select-select2" id="filter_status" style="width: 100%;">
+                                        <option value="">-- Select --</option>
+                                        <option value="Approved">Approved</option>
+                                        <option value="On-progress">On-progress</option>
+                                    </select>
+                                </div>
+                            </div> -->
+                            <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="filter_person">Person wise</label>
                                     <select class="form-control select-select2" id="filter_person" style="width: 100%;">
@@ -69,19 +82,7 @@ use App\Models\StageTrack;
                                     </select>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="filter_status">Status Wise</label>
-                                    <select class="form-control select-select2" id="filter_status" style="width: 100%;">
-                                        <option value="">-- Select --</option>
-                                        <option value="Approved">Approved</option>
-                                        <option value="On-progress">On-progress</option>
-                                    </select>
-                                </div>
-                            </div>
+                        
 
                             <div class="col-md-6">
                                 <div class="form-group">
