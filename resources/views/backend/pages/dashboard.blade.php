@@ -35,7 +35,7 @@ use App\Models\StageTrack;
             <h1 class="card-title">{{ $commons['content_title'] }}</h1>
 
             <div class="card-tools">
-                Note:: [ You have to Click Row =>  to see the full content ]
+                Note:: [ You have to Click Row ]
             </div>
         </div>
         <!-- /.card-header -->
