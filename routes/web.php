@@ -93,6 +93,12 @@ Route::group(['prefix' => 'backend', 'middleware' => 'authenticated'], function 
 
       Route::get('/generate-pdf', [PDFController::class, 'generatePDF'])->name('generate-pdf');
 
+    //   Route::get('/generate-allpdf', [PDFController::class, 'generateallPDF'])->name('generate-allpdf');
+
+    Route::get('/generateall-pdf/{task_id}', [PDFController::class, 'generateallPDF'])->name('generateall-pdf');
+
+
+
 
     // Ajax routes ........
 

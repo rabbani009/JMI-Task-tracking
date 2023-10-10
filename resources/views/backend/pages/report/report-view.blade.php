@@ -280,14 +280,6 @@ document.getElementById('pdfButton').addEventListener('click', function() {
 });
 
 
-
-
-
-
-
-
-
-
 </script>
 
 

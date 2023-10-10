@@ -31,6 +31,9 @@
       <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
+          
+      <button id="printButton" class="btn btn-primary mb-5">Print</button>
+
 
         <!-- Timelime example  -->
         <div class="row">
@@ -59,72 +62,72 @@
           </div>
           <!-- /.col -->
           <div class="col-md-6">
-          <div class="timeline">
-                <div class="time-label">
-                        <span class="bg-red">Task Details</span>
-                </div>
-         </div>
-          <div class="card card-primary card-outline">
-              <div class="card-body box-profile">
-                
-                <h3 class="profile-username text-center">{{$task->task_title}}</h3>
-
-                <ul class="list-group list-group-unbordered mb-3">
-                  <li class="list-group-item">
-                    <b>SBU : </b> <a class="float-right">{{ $task->sbu->name}}</a>
-                  </li>
-                  <li class="list-group-item">
-                    <b>Task Opening Date : </b> <a class="float-right">{{ \Carbon\Carbon::parse($task->start_date)->format('Y-m-d') }}</a>
-                  </li>
-                  <li class="list-group-item">
-                    <b>Expected Closing Date : </b> <a class="float-right">{{ \Carbon\Carbon::parse($task->end_date)->format('Y-m-d') }}</a>
-                  </li>
-                  
-                 
-                  <li class="list-group-item">
-                      <b>Target Office :</b>
-                      @php
-                          $a_office = json_decode($task->a_office);
-                          $combinedOffice = implode(', ', $a_office);
-                      @endphp
-                      <a class="float-right">{{ $combinedOffice }}</a>
-                  </li>
-
-                  <li class="list-group-item">
-                       <b>Time Left :</b>
-                       
-                        <a class="float-right">
-                            @php
-                                $expectedClosingDate = \Carbon\Carbon::parse($task->end_date);
-                                $currentDate = \Carbon\Carbon::now();
-
-                                if ($currentDate->gt($expectedClosingDate)) {
-                                    // The current date is greater than the expected closing date, so it's finished.
-                                    echo "Time finished";
-                                } else {
-                                    // Calculate the days remaining, considering years, months, and days.
-                                    $diff = $expectedClosingDate->diff($currentDate);
-                                    $daysRemaining = $diff->format('%m months,%d days');
-                                    echo $daysRemaining . " left";
-                                }
-                            @endphp
-                          </a>
-                  </li>
-
-                  @if(!empty($task->remarks))
-                      <li class="list-group-item">
-                          <b style="color:red">Issuees Reason:</b><a class="float-right">{{ $task->remarks }}</a>
-                      </li>
-                  @endif
-
-                </ul>
-
-              </div>
-              <!-- /.card-body -->
+            <div class="timeline">
+                    <div class="time-label">
+                            <span class="bg-red">Task Details</span>
+                    </div>
             </div>
+            <div class="card card-primary card-outline">
+                <div class="card-body box-profile">
+                    
+                    <h3 class="profile-username text-center">{{$task->task_title}}</h3>
+
+                    <ul class="list-group list-group-unbordered mb-3">
+                    <li class="list-group-item">
+                        <b>SBU : </b> <a class="float-right">{{ $task->sbu->name}}</a>
+                    </li>
+                    <li class="list-group-item">
+                        <b>Task Opening Date : </b> <a class="float-right">{{ \Carbon\Carbon::parse($task->start_date)->format('Y-m-d') }}</a>
+                    </li>
+                    <li class="list-group-item">
+                        <b>Expected Closing Date : </b> <a class="float-right">{{ \Carbon\Carbon::parse($task->end_date)->format('Y-m-d') }}</a>
+                    </li>
+                    
+                    
+                    <li class="list-group-item">
+                        <b>Target Office :</b>
+                        @php
+                            $a_office = json_decode($task->a_office);
+                            $combinedOffice = implode(', ', $a_office);
+                        @endphp
+                        <a class="float-right">{{ $combinedOffice }}</a>
+                    </li>
+
+                    <li class="list-group-item">
+                        <b>Time Left :</b>
+                        
+                            <a class="float-right">
+                                @php
+                                    $expectedClosingDate = \Carbon\Carbon::parse($task->end_date);
+                                    $currentDate = \Carbon\Carbon::now();
+
+                                    if ($currentDate->gt($expectedClosingDate)) {
+                                        // The current date is greater than the expected closing date, so it's finished.
+                                        echo "Time finished";
+                                    } else {
+                                        // Calculate the days remaining, considering years, months, and days.
+                                        $diff = $expectedClosingDate->diff($currentDate);
+                                        $daysRemaining = $diff->format('%m months,%d days');
+                                        echo $daysRemaining . " left";
+                                    }
+                                @endphp
+                            </a>
+                    </li>
+
+                    @if(!empty($task->remarks))
+                        <li class="list-group-item">
+                            <b style="color:red">Issuees Reason:</b><a class="float-right">{{ $task->remarks }}</a>
+                        </li>
+                    @endif
+
+                    </ul>
+
+                </div>
+                <!-- /.card-body -->
+                </div>
 
 
-          </div>
+            </div>
         </div>
       </div>
       <!-- /.timeline -->
@@ -278,5 +281,17 @@
 
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
 @section('page_level_js_scripts')
+
+<script>
+document.getElementById('printButton').addEventListener('click', function() {
+    // Get the task_id of the current task
+    var task_id = '{{ $task->task_id }}';
+
+    // Open a new tab/window to display the PDF
+    window.open('{{ route("generateall-pdf", ["task_id" => ":task_id"]) }}'.replace(':task_id', task_id));
+});
+</script>
+
+
 
 @endsection
