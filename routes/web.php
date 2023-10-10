@@ -8,6 +8,7 @@ use App\Http\Controllers\AuthControllers\{
     LogoutController,
     RegisterController,
     ResetPasswordController,
+
 };
 use App\Http\Controllers\BackendControllers\{
     
@@ -15,7 +16,11 @@ use App\Http\Controllers\BackendControllers\{
     SbuController,
     TaskController,
     AjaxController,
-    StageTrackController
+    StageTrackController,
+    ReportController,
+    SearchController,
+    PDFController,
+    ReasonController
 
 
   
@@ -60,20 +65,47 @@ Route::group(['prefix' => 'backend', 'middleware' => 'authenticated'], function 
     Route::resource('sbu', SbuController::class);
     Route::resource('task', TaskController::class);
     Route::resource('stage', StageTrackController::class);
+    Route::resource('report', ReportController::class);
+
+    //Task Finished.........
+
+    Route::post('/tasks/{task}/complete',[TaskController::class,'complete'])->name('tasks.complete');
+
+
+    Route::post('/update-reason/{task_id}', [ReasonController::class, 'update'])->name('updateReason');
 
 
 
+   
+
+    //Search filtered items
+
+     Route::get('/filter-task-wise-data',[SearchController::class,'search']);
+
+     Route::get('/filter-sbu-wise-data',[SearchController::class,'searchsbu']);
+
+     Route::get('/filter-person-wise-data',[SearchController::class,'searchperson']);
+
+     Route::get('/filter-product-wise-data',[SearchController::class,'searchproduct']);
+
+
+     //PDF routes.........
+
+      Route::get('/generate-pdf', [PDFController::class, 'generatePDF'])->name('generate-pdf');
 
 
     // Ajax routes ........
 
-    Route::get('getTaskData/{taskId}',[AjaxController::class,'getTaskData']);
+      Route::get('getTaskData/{taskId}',[AjaxController::class,'getTaskData']);
 
-    Route::post('saveTaskTrackData', [AjaxController::class, 'saveTaskTrackData']);
-
-
+      Route::post('saveTaskTrackData', [AjaxController::class, 'saveTaskTrackData']);
 
 
+
+
+ 
+    
+   
 
 });
 

@@ -38,7 +38,8 @@ class DashboardController extends Controller
         if($user_type=='system'){
 
             $tasks = Task::where('status', 1)
-            ->with(['sbu','user','createdBy', 'updatedBy','stageTracks'])->get();
+            ->orderBy('id', 'desc')
+            ->with(['sbu','user','createdBy', 'updatedBy','stageTracks'])->paginate(7);
     
             // dd($tasks);
 
@@ -46,7 +47,9 @@ class DashboardController extends Controller
 
             $tasks = Task::where('status', 1)
             ->where('user_id', auth()->user()->id)
-            ->with(['sbu','user','createdBy', 'updatedBy','stageTracks'])->get();
+            ->where('task_status', 0)
+            ->orderBy('id', 'desc')
+            ->with(['sbu','user','createdBy', 'updatedBy','stageTracks'])->paginate(7);
     
             // dd($tasks);
 

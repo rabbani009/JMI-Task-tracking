@@ -46,8 +46,8 @@
 
                         <div class="col-md-6">
                             <div class="form-group  @if ($errors->has('user')) has-error @endif">
-                                <label class="control-label">Assigned People *</label>
-                                
+                                <label class="control-label">Assigned Executive *</label>
+                                  
                                 {{ Form::select('user_id', $users, old('user_id')?old('user_id'):null, ['id="council", class="form-control select2"']) }}
 
                                 @if($errors->has('user_id'))
@@ -80,16 +80,26 @@
                             <div class="select2-purple">
                                 <select name= task_approved_steps[] class="select2" multiple="multiple" data-placeholder="Select Steps sequently" data-dropdown-css-class="select2-purple" style="width: 100%;">
 
-                                    <option value="Receving PMD from source">Receving PMD from source</option>
+                                    <option value="Receving Documents from PMD">Receving Documents from PMD</option>
+
                                      <option value="Submitting Product Application">Submitting Product Application</option>
-                                    <option value="Recipent approval">Recipent approval</option>
-                                    <option value="Registration(Brand approval)">Registration(Brand approval)</option>
-                                    <option value="Registration(Package approval)">Registration(Package approval)</option>
+                                    <option value="Recipe approval">Recipe approval</option>
+
+                                    <option value="Brand Name approval">Brand Name approval</option>
+
+                                    <option value="Packaging approval">Packaging approval</option>
+
                                     <option value="Price approval">Price approval</option>
+
                                     <option value="Marketing Authorization">Marketing Authorization</option>
                                     <option value="Inspection">Inspection</option>
+
                                     <option value="Meeting Date">Meeting Date</option>
-                                </select>
+
+                                    <option value="Registration">Registration</option>
+
+                                    <option value="registration process completed">registration process completed</option>
+                               </select>
                             </div>
                         </div>
                         </div>

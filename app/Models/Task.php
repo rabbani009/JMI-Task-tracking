@@ -39,7 +39,50 @@ class Task extends Model
         return $this->hasMany(StageTrack::class, 'task_id', 'task_id');
     }
 
+    // Dashboard Task Filter
+
+    public function getTaskStatus()
+    {
+        $taskApprovedSteps = json_decode($this->task_approved_steps, true);
+        
+        $approvedStages = StageTrack::where('task_id', $this->task_id)
+            ->whereIn('stage_status', $taskApprovedSteps)
+            ->get();
+        
+        $allStagesApproved = $approvedStages->count() === count($taskApprovedSteps);
+        $anyStages = $this->stageTracks->isNotEmpty();
+        
+        if ($allStagesApproved) {
+            return 3; // Completed status
+        } elseif ($anyStages && !$allStagesApproved) {
+            return 2; // On-Progress status
+        } elseif (!$anyStages) {
+            return 0; // Not Started status
+        } else {
+            return 4; // Rejected status
+        }
+    }
+
+
+
+
+
+
+
+
+    
+    
+    
+    
+}
+
+
+
+
+
+
+
   
 
    
-}
+

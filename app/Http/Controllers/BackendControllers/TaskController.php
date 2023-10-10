@@ -8,6 +8,8 @@ use App\Http\Requests\CreateTaskRequest;
 use App\Models\Sbu;
 use App\Models\User;
 use App\Models\Task;
+use App\Models\StageTrack;
+use Illuminate\Support\Facades\Gate;
 
 
 
@@ -22,8 +24,8 @@ class TaskController extends Controller
     {
         $commons['page_title'] = 'Task';
         $commons['content_title'] = 'List of All Task';
-        $commons['main_menu'] = 'task';
-        $commons['current_menu'] = 'task';
+        $commons['main_menu'] = 'main_task';
+        $commons['current_menu'] = 'task_all';
 
 
         $users = auth()->user();
@@ -40,17 +42,19 @@ class TaskController extends Controller
         if($user_type=='system'){
 
             $tasks = Task::where('status', 1)
+            ->orderBy('id', 'desc')
             ->with(['sbu', 'user', 'createdBy', 'updatedBy', 'stageTracks'])         
-            ->paginate(3);
+            ->paginate(7);
 
             
 
         }else{
 
             $tasks = Task::where('status', 1)
+            ->orderBy('id', 'desc')
             ->where('user_id', auth()->user()->id)
             ->with(['sbu', 'user', 'createdBy', 'updatedBy', 'stageTracks'])  
-            ->paginate(3);
+            ->paginate(7);
     
             // dd($tasks);
 
@@ -78,8 +82,8 @@ class TaskController extends Controller
     {
         $commons['page_title'] = 'Task';
         $commons['content_title'] = 'Add new Task';
-        $commons['main_menu'] = 'task';
-        $commons['current_menu'] = 'task';
+        $commons['main_menu'] = 'main_task';
+        $commons['current_menu'] = 'task_create';
 
         $sbus = Sbu::where('status', 1)
         //  ->where('id', auth()->user()->belongs_to)
@@ -146,7 +150,7 @@ class TaskController extends Controller
     
             return redirect()
                 ->back()
-                ->with('failed', 'Task cannot be created!');
+                ->with('failed', 'Task is not create!');
 
     }
 
@@ -195,12 +199,37 @@ class TaskController extends Controller
         //
     }
 
-
+  //Generate Unique Task ID
 
     private function generateUniqueId()
     {
         return str_pad(mt_rand(100000, 999999), 6, '0', STR_PAD_LEFT);
     }
+
+    // Mark as finished Task
+
+     public function complete(Task $task)
+        {
+            
+            // Toggle the task status between 0 (ongoing) and 3 (finished)
+            $newStatus = $task->task_status === 0 ? 3 : 0;
+            $task->update(['task_status' => $newStatus]);
+        
+            // Return the updated task status in the response
+            return back()->with('success', 'Task status updated.');
+        }
+    
+    
+    
+    
+    
+    
+
+
+
+    
+    
+    
 
 
 
